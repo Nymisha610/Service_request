@@ -4,6 +4,6 @@ export function toApiPayload(form) {
     name: form.name.trim(),
     email: form.email.trim(),
     subject: form.subject.trim(),
-    message: form.description.trim(),
+    description: form.description.trim(),
   };
 }

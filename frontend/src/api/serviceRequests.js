@@ -7,7 +7,7 @@ export function getHealth() {
 
 export async function fetchServiceRequests() {
   const payload = await request("/api/requests");
-  return payload.requests;
+  return payload.data;
 }
 
 export function createServiceRequest(form) {
