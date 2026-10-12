@@ -7,8 +7,9 @@ from fastapi.testclient import TestClient
 def client(tmp_path, monkeypatch):
     monkeypatch.setenv("DATA_FILE", str(tmp_path / "requests.json"))
     from app import main
+    from app.storage import RequestStore
 
-    main.store = main.RequestStore(main.get_data_file())
+    main.store = RequestStore(main.get_data_file())
     return TestClient(main.app)
 
 
@@ -26,6 +27,13 @@ def test_health(client):
     assert res.json()["status"] == "ok"
 
 
+def test_root_describes_api_routes(client):
+    res = client.get("/")
+    assert res.status_code == 200
+    assert res.json()["health"] == "/api/health"
+    assert res.json()["requests"] == "/api/requests"
+
+
 def test_list_returns_seed_data(client):
     body = client.get("/api/requests").json()
     assert body["count"] == len(body["data"]) == 3
@@ -38,7 +46,20 @@ def test_create_and_list(client):
     created = res.json()["data"]
     assert created["email"] == "test.user@example.com"
     assert created["status"] == "open"
-    assert client.get("/api/requests").json()["count"] == 4
+    listed = client.get("/api/requests").json()
+    assert listed["count"] == 4
+    assert listed["data"][0]["subject"] == VALID["subject"]
+
+
+def test_file_storage_survives_store_recreation(tmp_path):
+    from app.storage import RequestStore
+
+    first_store = RequestStore(tmp_path / "persistent-requests.json")
+    created = first_store.create(VALID)
+    second_store = RequestStore(tmp_path / "persistent-requests.json")
+
+    assert second_store.list()[0]["id"] == created["id"]
+    assert second_store.list()[0]["subject"] == VALID["subject"]
 
 
 def test_validation_errors_are_field_level(client):

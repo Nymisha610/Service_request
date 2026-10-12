@@ -189,5 +189,5 @@ See [`docs/API.md`](docs/API.md). In short: `GET /api/health`, `GET /api/request
 
 Requests are stored in `backend/data/requests.json` (created on first run). Many free hosts use an
 **ephemeral filesystem**, so on those platforms the file is wiped whenever the service restarts, redeploys or
-spins down, and the three sample requests reappear. That is expected for this assignment; mention it in your
-submission rather than treating it as a bug.
+spins down, and the three sample requests reappear. A normal browser refresh by itself should not clear a
+request while the API process and its data file remain available.

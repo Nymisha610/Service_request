@@ -39,6 +39,17 @@ def error_response(status: int, code: str, message: str, fields: dict | None = N
     return JSONResponse(status_code=status, content=body)
 
 
+@app.get("/")
+def index():
+    return {
+        "service": "service-request-api",
+        "status": "ok",
+        "docs": "/docs",
+        "health": "/api/health",
+        "requests": "/api/requests",
+    }
+
+
 def _friendly(err: dict) -> str:
     kind = err.get("type", "")
     ctx = err.get("ctx", {})

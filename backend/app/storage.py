@@ -6,6 +6,8 @@ data as demo data.
 """
 import json
 import logging
+import os
+import tempfile
 import threading
 from datetime import datetime, timezone
 from pathlib import Path
@@ -41,10 +43,32 @@ class RequestStore:
     def _persist(self) -> None:
         if self.mode != "file":
             return
+        temp_path = None
         try:
             self._file.parent.mkdir(parents=True, exist_ok=True)
-            self._file.write_text(json.dumps(self._items, indent=2), encoding="utf-8")
+            with tempfile.NamedTemporaryFile(
+                mode="w",
+                encoding="utf-8",
+                dir=self._file.parent,
+                prefix=f".{self._file.name}.",
+                suffix=".tmp",
+                delete=False,
+            ) as temp_file:
+                temp_path = Path(temp_file.name)
+                json.dump(self._items, temp_file, indent=2)
+                temp_file.flush()
+                os.fsync(temp_file.fileno())
+            os.replace(temp_path, self._file)
         except OSError as exc:
+            if temp_path is not None:
+                try:
+                    temp_path.unlink(missing_ok=True)
+                except OSError as cleanup_error:
+                    logger.warning(
+                        "Could not remove temporary file %s (%s)",
+                        temp_path,
+                        cleanup_error,
+                    )
             logger.warning("Could not write %s (%s); switching to memory", self._file, exc)
             self.mode = "memory"
 

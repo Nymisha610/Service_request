@@ -2,6 +2,9 @@
 
 Base URL (local): `http://127.0.0.1:8000`. All endpoints return JSON. Interactive docs: `/docs`.
 
+Opening the base URL (`/`) returns a small service status response with links to the health endpoint,
+request endpoints, and interactive documentation.
+
 ## Conventions
 
 - Successful responses wrap their payload in a `data` key.
