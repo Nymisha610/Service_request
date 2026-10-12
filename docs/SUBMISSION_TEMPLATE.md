@@ -56,12 +56,12 @@ How I Verified It: Verified that newly submitted requests remain visible after r
 
 | # | Test | Desktop | Mobile | Result (pass/fail) | Notes |
 | --- | --- | --- | --- | --- | --- |
-| 1 | Page loads, list renders |Pass |Pass |Pass |Pass |
-| 2 | Submit a valid request → success message, list updates |Pass |Pass |Pass |Pass |
-| 3 | Submit invalid input → clear messages, nothing sent/stored | Pass| Pass|Pass |Pass |
-| 4 | API unavailable → error state, no blank page, no fake success |Pass |Pass |Pass |Pass|
-| 5 | Layout at ~375px and ~1280px wide |Pass|Pass |Pass |Pass |
-| 6 | Deployed site over HTTPS in a fresh/private browser session |Pass|Pass |Pass |Pass |
+| 1 | Page loads, list renders |Yes |Yes |Pass | |
+| 2 | Submit a valid request → success message, list updates |Yes |Yes |Pass | |
+| 3 | Submit invalid input → clear messages, nothing sent/stored | Yes| Yes|Pass | |
+| 4 | API unavailable → error state, no blank page, no fake success |Yes |Yes |Pass ||
+| 5 | Layout at ~375px and ~1280px wide |Yes|Yes |Pass | |
+| 6 | Deployed site over HTTPS in a fresh/private browser session |Yes|Yes |Pass | |
 | … | | | | | |
 
 Evidence of the working site (screenshots or recording link): https://drive.google.com/file/d/1vYZIpkQ_jDSer3L-jz23lFwURl_HT0mq/view?usp=sharing
